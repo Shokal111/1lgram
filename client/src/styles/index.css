@@ -1,0 +1,398 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base Styles */
+:root {
+    --glow-color: rgba(0, 255, 255, 0.5);
+    --primary: #00ffff;
+    --secondary: #ff00ff;
+    --bg: #0a0a0f;
+    --surface: #12121a;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Theme Variables */
+.theme-dark-cyber {
+    --glow-color: rgba(0, 255, 255, 0.5);
+    --primary: #00ffff;
+    --secondary: #ff00ff;
+    --accent: #7c3aed;
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface-2: #1a1a25;
+    --text: #e0e0e0;
+    --text-muted: #6b7280;
+    --border: rgba(0, 255, 255, 0.2);
+}
+
+.theme-light-minimal {
+    --glow-color: rgba(59, 130, 246, 0.3);
+    --primary: #3b82f6;
+    --secondary: #8b5cf6;
+    --accent: #06b6d4;
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --surface-2: #f1f5f9;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+}
+
+.theme-retro-vaporwave {
+    --glow-color: rgba(255, 107, 157, 0.5);
+    --primary: #ff6b9d;
+    --secondary: #c44dff;
+    --accent: #00d4ff;
+    --bg: #1a1a2e;
+    --surface: #16213e;
+    --surface-2: #1f2b4a;
+    --text: #ffeeff;
+    --text-muted: #8892b0;
+    --border: rgba(255, 107, 157, 0.3);
+}
+
+/* Custom Scrollbar - Cyber Theme */
+.theme-dark-cyber ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.theme-dark-cyber ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+}
+
+.theme-dark-cyber ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #00ffff, #7c3aed);
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.theme-dark-cyber ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #00ffff, #ff00ff);
+}
+
+/* Custom Scrollbar - Light Theme */
+.theme-light-minimal ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.theme-light-minimal ::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+
+.theme-light-minimal ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+.theme-light-minimal ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Custom Scrollbar - Vaporwave Theme */
+.theme-retro-vaporwave ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.theme-retro-vaporwave ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+}
+
+.theme-retro-vaporwave ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #ff6b9d, #c44dff);
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(255, 107, 157, 0.5);
+}
+
+.theme-retro-vaporwave ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #ff6b9d, #00d4ff);
+}
+
+/* Glass Effect */
+.glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+}
+
+.glass-dark {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+}
+
+.glass-light {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Neon Glow Effects */
+.neon-glow {
+    box-shadow: 0 0 20px var(--glow-color), 0 0 40px var(--glow-color);
+}
+
+.neon-text {
+    text-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary), 0 0 30px var(--primary);
+}
+
+.neon-border {
+    border: 1px solid var(--primary);
+    box-shadow: 0 0 10px var(--glow-color), inset 0 0 10px var(--glow-color);
+}
+
+/* Gradient Backgrounds */
+.bg-gradient-cyber {
+    background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2a 50%, #0a0a0f 100%);
+}
+
+.bg-gradient-vapor {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+}
+
+/* Message Bubble Tail */
+.message-tail-sent::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: -8px;
+    width: 16px;
+    height: 16px;
+    background: inherit;
+    clip-path: polygon(0 0, 0% 100%, 100% 100%);
+}
+
+.message-tail-received::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -8px;
+    width: 16px;
+    height: 16px;
+    background: inherit;
+    clip-path: polygon(100% 0, 0% 100%, 100% 100%);
+}
+
+/* Typing Indicator */
+.typing-dot {
+    animation: typing 1.4s infinite;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+/* Ripple Effect */
+.ripple-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(0);
+    animation: ripple 0.6s ease-out;
+    pointer-events: none;
+}
+
+/* Particle Effect */
+.particle {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 50%;
+    animation: particle 1s ease-out forwards;
+}
+
+/* Status Indicators */
+.status-online {
+    background: #22c55e;
+    box-shadow: 0 0 8px #22c55e;
+}
+
+.status-away {
+    background: #eab308;
+    box-shadow: 0 0 8px #eab308;
+}
+
+.status-busy {
+    background: #ef4444;
+    box-shadow: 0 0 8px #ef4444;
+}
+
+.status-offline {
+    background: #6b7280;
+}
+
+/* Input Focus Effects */
+.input-cyber:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--glow-color), 0 0 20px var(--glow-color);
+}
+
+/* Button Hover Effects */
+.btn-cyber {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.btn-cyber::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+}
+
+.btn-cyber:hover::before {
+    transform: translateX(100%);
+}
+
+.btn-cyber:hover {
+    box-shadow: 0 0 20px var(--glow-color), 0 0 40px var(--glow-color);
+}
+
+/* Selection Color */
+::selection {
+    background: var(--primary);
+    color: var(--bg);
+}
+
+/* Focus Visible */
+:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Animations */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.shimmer {
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.1),
+            transparent);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+}
+
+/* Emoji Picker Custom Styles */
+em-emoji-picker {
+    --em-rgb-background: 18, 18, 26;
+    --em-rgb-input: 26, 26, 37;
+    --em-rgb-color: 224, 224, 224;
+}
+
+.theme-light-minimal em-emoji-picker {
+    --em-rgb-background: 255, 255, 255;
+    --em-rgb-input: 241, 245, 249;
+    --em-rgb-color: 30, 41, 59;
+}
+
+.theme-retro-vaporwave em-emoji-picker {
+    --em-rgb-background: 22, 33, 62;
+    --em-rgb-input: 31, 43, 74;
+    --em-rgb-color: 255, 238, 255;
+}
+
+/* Voice Waveform */
+.voice-waveform {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 32px;
+}
+
+.voice-waveform span {
+    width: 3px;
+    background: var(--primary);
+    border-radius: 2px;
+    animation: waveform 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes waveform {
+    0% {
+        height: 4px;
+    }
+
+    100% {
+        height: 100%;
+    }
+}
+
+.voice-waveform span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.voice-waveform span:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.voice-waveform span:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.voice-waveform span:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+.voice-waveform span:nth-child(5) {
+    animation-delay: 0.4s;
+}
+
+.voice-waveform span:nth-child(6) {
+    animation-delay: 0.5s;
+}
+
+.voice-waveform span:nth-child(7) {
+    animation-delay: 0.6s;
+}
+
+.voice-waveform span:nth-child(8) {
+    animation-delay: 0.7s;
+}
