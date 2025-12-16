@@ -1,6 +1,6 @@
 import express from 'express';
 import { createServer } from 'http';
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
 import cors from 'cors';
 import { v4 as uuidv4 } from 'uuid';
 import dotenv from 'dotenv';
@@ -100,7 +100,7 @@ app.get('/api/users', (req, res) => {
 });
 
 // Socket.io connection handling
-io.on('connection', (socket: Socket) => {
+io.on('connection', (socket: any) => {
     const userId = socket.handshake.query.userId as string;
 
     console.log(`🔌 User connected: ${userId} (socket: ${socket.id})`);
