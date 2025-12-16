@@ -4,12 +4,11 @@ import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import WelcomeScreen from './components/WelcomeScreen';
 import Sidebar from './components/Sidebar';
 import ChatWindow from './components/ChatWindow';
-import EmptyChat from './components/EmptyChat';
 import ParticleBackground from './components/ParticleBackground';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function AppContent() {
-    const { currentUser, isLoading, activeChat } = useChat();
+    const { currentUser, isLoading } = useChat();
     const { theme } = useTheme();
 
     if (isLoading) {
@@ -21,40 +20,21 @@ function AppContent() {
     }
 
     return (
-        <div className="h-screen w-screen flex overflow-hidden relative">
-            {/* Particle Background */}
+        <div className="h-screen w-screen flex overflow-hidden relative bg-black">
+            {/* Particle Background Layer */}
             {theme !== 'light-minimal' && <ParticleBackground />}
 
-            {/* Main Content */}
+            {/* Main Application Layout */}
             <div className="flex w-full h-full relative z-10">
-                {/* Sidebar */}
-                <Sidebar />
+                {/* Sidebar - Always visible on Desktop, togglable on Mobile (handled internally or via responsive logic) */}
+                <div className="h-full relative z-20 shadow-2xl">
+                    <Sidebar />
+                </div>
 
-                {/* Chat Area */}
-                <AnimatePresence mode="wait">
-                    {activeChat ? (
-                        <motion.div
-                            key="chat"
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            transition={{ duration: 0.2 }}
-                            className="flex-1 flex flex-col"
-                        >
-                            <ChatWindow />
-                        </motion.div>
-                    ) : (
-                        <motion.div
-                            key="empty"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            className="flex-1 flex flex-col"
-                        >
-                            <EmptyChat />
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+                {/* Chat Area - Occupies remaining space */}
+                <div className="flex-1 flex flex-col h-full relative overflow-hidden">
+                    <ChatWindow />
+                </div>
             </div>
         </div>
     );
@@ -62,22 +42,17 @@ function AppContent() {
 
 function LoadingScreen() {
     return (
-        <div className="h-screen w-screen flex items-center justify-center bg-gradient-cyber">
+        <div className="h-screen w-screen flex items-center justify-center bg-black text-[#00f3ff]">
             <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="text-center"
+                className="text-center relative"
             >
-                <div className="relative mb-6">
-                    <div className="w-20 h-20 rounded-full border-4 border-cyber-primary/30 border-t-cyber-primary animate-spin mx-auto" />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-3xl">💬</span>
-                    </div>
-                </div>
-                <h2 className="text-2xl font-display font-bold text-cyber-primary neon-text">
-                    NEXUS CHAT
+                <div className="w-24 h-24 rounded-full border-4 border-[#00f3ff] border-t-transparent animate-spin mx-auto mb-6 shadow-[0_0_20px_#00f3ff]"></div>
+                <h2 className="text-3xl font-black tracking-widest animate-pulse">
+                    NEXUS<span className="text-[#bc13fe]">OS</span>
                 </h2>
-                <p className="text-cyber-muted mt-2">Initializing...</p>
+                <p className="font-mono text-sm mt-2 opacity-70">INITIALIZING NEURAL LINK...</p>
             </motion.div>
         </div>
     );

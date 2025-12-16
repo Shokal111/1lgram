@@ -1,11 +1,14 @@
-# 🌟 Nexus Chat - Futuristic Real-Time Messenger
+# Nexus Chat 2077 🚀
+
+> **Now your Nexus Chat is fully alive! Open and send first message — it will answer you back.** 🤖✨
 
 ![Nexus Chat](https://img.shields.io/badge/Nexus-Chat-00ffff?style=for-the-badge&logo=messenger&logoColor=white)
 ![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript)
 ![Socket.io](https://img.shields.io/badge/Socket.io-4-010101?style=for-the-badge&logo=socket.io)
 
-A stunning, cyberpunk-themed real-time messenger with neon aesthetics, glass-morphism, and smooth animations. Built with modern technologies for the ultimate chat experience.
+A futuristic, cyberpunk-themed real-time messenger built with the MERN stack (MongoDB, Express, React, Node.js).
+Featuring real-time messaging, file sharing, voice messages, and a fully persistent IndexedDB storage system.
 
 ## ✨ Features
 

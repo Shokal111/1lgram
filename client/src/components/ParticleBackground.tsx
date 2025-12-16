@@ -1,112 +1,141 @@
 import React, { useEffect, useRef } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 
-interface Particle {
-    x: number;
-    y: number;
-    vx: number;
-    vy: number;
-    size: number;
-    alpha: number;
-    color: string;
-}
-
 export default function ParticleBackground() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const { theme } = useTheme();
-    const particlesRef = useRef<Particle[]>([]);
-    const animationRef = useRef<number>();
 
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
-
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
-        const resizeCanvas = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        let w: number, h: number;
+        let particles: Particle[] = [];
+        let mouse = { x: -100, y: -100 };
+
+        const resize = () => {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+            init();
         };
 
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
+        class Particle {
+            x: number;
+            y: number;
+            vx: number;
+            vy: number;
+            size: number;
+            color: string;
 
-        // Initialize particles
-        const particleCount = 50;
-        const colors = theme === 'retro-vaporwave'
-            ? ['#ff6b9d', '#c44dff', '#00d4ff']
-            : ['#00ffff', '#ff00ff', '#7c3aed'];
+            constructor() {
+                this.x = Math.random() * w;
+                this.y = Math.random() * h;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1;
+                this.color = Math.random() > 0.5 ? '#00f3ff' : '#bc13fe';
+            }
 
-        particlesRef.current = Array.from({ length: particleCount }, () => ({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            vx: (Math.random() - 0.5) * 0.5,
-            vy: (Math.random() - 0.5) * 0.5,
-            size: Math.random() * 2 + 1,
-            alpha: Math.random() * 0.5 + 0.1,
-            color: colors[Math.floor(Math.random() * colors.length)]
-        }));
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > w) this.vx *= -1;
+                if (this.y < 0 || this.y > h) this.vy *= -1;
+
+                // Mouse avoidance/attraction
+                const dx = mouse.x - this.x;
+                const dy = mouse.y - this.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 150) {
+                    this.x += dx * 0.01;
+                    this.y += dy * 0.01;
+                }
+            }
+
+            draw() {
+                if (!ctx) return;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        const init = () => {
+            particles = [];
+            const count = Math.min(window.innerWidth / 10, 100);
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle());
+            }
+        };
 
         const animate = () => {
-            ctx.fillStyle = 'rgba(10, 10, 15, 0.1)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            if (!ctx) return;
+            ctx.clearRect(0, 0, w, h);
 
-            particlesRef.current.forEach((particle, i) => {
-                // Update position
-                particle.x += particle.vx;
-                particle.y += particle.vy;
+            // Draw Connections
+            for (let i = 0; i < particles.length; i++) {
+                const p1 = particles[i];
+                p1.update();
+                p1.draw();
 
-                // Wrap around edges
-                if (particle.x < 0) particle.x = canvas.width;
-                if (particle.x > canvas.width) particle.x = 0;
-                if (particle.y < 0) particle.y = canvas.height;
-                if (particle.y > canvas.height) particle.y = 0;
+                // Connect to mouse
+                const mdx = mouse.x - p1.x;
+                const mdy = mouse.y - p1.y;
+                const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+                if (mdist < 200) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(0, 243, 255, ${1 - mdist / 200})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.moveTo(p1.x, p1.y);
+                    ctx.lineTo(mouse.x, mouse.y);
+                    ctx.stroke();
+                }
 
-                // Draw particle
-                ctx.beginPath();
-                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-                ctx.fillStyle = particle.color;
-                ctx.globalAlpha = particle.alpha;
-                ctx.fill();
+                // Connect to other particles
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dx = p1.x - p2.x;
+                    const dy = p1.y - p2.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
 
-                // Draw connections
-                particlesRef.current.slice(i + 1).forEach(other => {
-                    const dx = particle.x - other.x;
-                    const dy = particle.y - other.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < 150) {
+                    if (dist < 100) {
                         ctx.beginPath();
-                        ctx.moveTo(particle.x, particle.y);
-                        ctx.lineTo(other.x, other.y);
-                        ctx.strokeStyle = particle.color;
-                        ctx.globalAlpha = (1 - distance / 150) * 0.2;
-                        ctx.lineWidth = 0.5;
+                        ctx.strokeStyle = `rgba(188, 19, 254, ${1 - dist / 100 * 0.5})`; // Purple connections
+                        ctx.lineWidth = 0.2;
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
                         ctx.stroke();
                     }
-                });
-            });
-
-            ctx.globalAlpha = 1;
-            animationRef.current = requestAnimationFrame(animate);
+                }
+            }
+            requestAnimationFrame(animate);
         };
 
+        const handleMouseMove = (e: MouseEvent) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        };
+
+        window.addEventListener('resize', resize);
+        window.addEventListener('mousemove', handleMouseMove);
+
+        resize();
         animate();
 
         return () => {
-            window.removeEventListener('resize', resizeCanvas);
-            if (animationRef.current) {
-                cancelAnimationFrame(animationRef.current);
-            }
+            window.removeEventListener('resize', resize);
+            window.removeEventListener('mousemove', handleMouseMove);
         };
-    }, [theme]);
+    }, []);
 
     return (
         <canvas
             ref={canvasRef}
-            className="fixed inset-0 pointer-events-none z-0"
-            style={{ opacity: 0.6 }}
+            className="absolute inset-0 z-0 pointer-events-none opacity-40 mix-blend-screen"
         />
     );
 }
