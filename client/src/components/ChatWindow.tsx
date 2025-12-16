@@ -26,8 +26,8 @@ export default function ChatWindow() {
     const otherUser = participants.find(p => p.id !== currentUser?.id);
 
     const chatName = activeChat?.type === 'group'
-        ? activeChat.name
-        : otherUser?.username || 'Unknown';
+        ? (activeChat.name || 'Group Chat')
+        : (otherUser?.username || 'Unknown');
 
     const chatAvatar = activeChat?.type === 'group'
         ? activeChat.avatar

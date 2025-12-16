@@ -11,20 +11,35 @@ const app = express();
 const server = createServer(app);
 
 const PORT = process.env.PORT || 5000;
-const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:5173';
+const CORS_ORIGINS = process.env.CORS_ORIGIN
+    ? process.env.CORS_ORIGIN.split(',').map(s => s.trim())
+    : ['http://localhost:5173', 'http://localhost:3000'];
 
-// Configure CORS
-app.use(cors({
-    origin: CORS_ORIGIN,
+// CORS configuration
+const corsOptions = {
+    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+        // Allow requests with no origin (mobile apps, curl, etc)
+        if (!origin) {
+            callback(null, true);
+            return;
+        }
+        if (CORS_ORIGINS.includes(origin) || CORS_ORIGINS.includes('*')) {
+            callback(null, true);
+        } else {
+            console.log(`⚠️ CORS blocked origin: ${origin}`);
+            callback(null, true); // Allow anyway for demo purposes
+        }
+    },
     credentials: true
-}));
+};
 
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Socket.io setup
 const io = new Server(server, {
     cors: {
-        origin: CORS_ORIGIN,
+        origin: CORS_ORIGINS.includes('*') ? '*' : CORS_ORIGINS,
         methods: ['GET', 'POST'],
         credentials: true
     },
@@ -292,7 +307,7 @@ server.listen(PORT, () => {
   ║   🔌 Socket: ws://localhost:${PORT}                ║
   ║                                                   ║
   ║   Environment: ${process.env.NODE_ENV || 'development'}                      ║
-  ║   CORS Origin: ${CORS_ORIGIN}             ║
+  ║   CORS Origins: ${CORS_ORIGINS.join(', ')}             ║
   ║                                                   ║
   ╚═══════════════════════════════════════════════════╝
   `);

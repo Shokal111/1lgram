@@ -7,13 +7,11 @@
         "strict": true,
         "skipLibCheck": true,
         "outDir": "./dist",
-        "rootDir": "./src",
         "declaration": true,
         "resolveJsonModule": true
     },
     "include": [
-        "src/**/*",
-        "../shared/**/*"
+        "src/**/*"
     ],
     "exclude": [
         "node_modules",
